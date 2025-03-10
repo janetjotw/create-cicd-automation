@@ -1,0 +1,184 @@
+openapi: 3.0.0
+info:
+  title: Products API
+  version: 1.0.0
+  description: Products API Reference
+servers:
+  - url: https://api.xime.com/v1
+components:
+  securitySchemes:
+    ApiKeyAuth:
+      type: apiKey
+      in: header
+      name: Authorization
+paths:
+  /products:
+    get:
+      summary: get all products
+      security:
+        - ApiKeyAuth:[]
+      parameters:
+        - name: category
+          in: query
+          schema:
+            type: string
+          description: Filter the products by category.
+        - name: limit
+          in: query
+          schema:
+            type: integer
+          description: The number of products per page.
+      responses:
+        200:
+          description: A list of products.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Hello World
+        401: 
+          description: Unauthorized
+        500:
+          description: Internal Server Error
+    post:
+      summary: Create a new product
+      security:
+        - ApiKeyAuth:[]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ProductInput'            
+      responses:
+        201:
+          description: Product created successfully.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Product'            
+        400:
+          description: Bad Request
+        401: 
+          description: Unauthorized
+        500:
+          description: Internal Server Error
+  /products/{productId}:
+    get:
+      summary: Get product by ID
+      security:
+        - ApiKeyAuth:[]
+      parameters:
+        - name: productId
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        200:
+          description: Product Name
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Product'            
+        401: 
+          description: Unauthorized
+        404:
+          description: Not Found
+        500:
+          description: Internal Server Error
+    put:
+      summary: Update product
+      security:
+        - ApiKeyAuth: []
+      parameters:
+        - name: productId
+          in: path
+          required: true
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ProductUpdateInput'
+      responses:
+        '200':
+          description: Product updated successfully.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Product'
+        '400':
+          description: Bad Request
+        '401':
+          description: Unauthorized
+        '404':
+          description: Not Found
+        '500':
+          description: Internal Server Error
+    delete:
+      summary: Delete product
+      security:
+        - ApiKeyAuth: []
+      parameters:
+        - name: productId
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '204':
+          description: No Content
+        '401':
+          description: Unauthorized
+        '404':
+          description: Not Found
+        '500':
+          description: Internal Server Error
+  components:
+    schemas:
+      Product:
+        type: object
+        properties:
+        id:
+          type: string
+        name:
+          type: string
+        description:
+          type: string
+        price:
+          type: number
+        category:
+          type: string
+      ProductInput:
+        type: object
+        properties:
+          name:
+            type: string
+          description:
+           type: string
+          price:
+            type: number
+          category:
+            type: string
+        required:
+          - name
+          - description
+          - price
+          - category
+      ProductUpdateInput:
+        type: object
+        properties:
+          name:
+            type: string
+          description:
+            type: string
+          price:
+            type: number
+          category:
+            type: string
