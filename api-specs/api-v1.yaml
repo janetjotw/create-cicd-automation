@@ -5,12 +5,6 @@ info:
   description: Products API Reference
 servers:
   - url: https://api.xime.com/v1
-components:
-  security:
-    ApiKeyAuth:
-      type: apiKey
-      in: header
-      name: Authorization
 paths:
   /products:
     get:
@@ -140,13 +134,29 @@ paths:
           description: Not Found
         '500':
           description: Internal Server Error
-  components:
-    schemas:
-      Product:
-        type: object
-        properties:
-        id:
-          type: string
+components:
+  security:
+    ApiKeyAuth:
+      type: apiKey
+      in: header
+      name: Authorization
+  schemas:
+    Product:
+      type: object
+      properties:
+      id:
+        type: string
+      name:
+        type: string
+      description:
+        type: string
+      price:
+        type: number
+      category:
+        type: string
+    ProductInput:
+      type: object
+      properties:
         name:
           type: string
         description:
@@ -155,30 +165,19 @@ paths:
           type: number
         category:
           type: string
-      ProductInput:
-        type: object
-        properties:
-          name:
-            type: string
-          description:
-           type: string
-          price:
-            type: number
-          category:
-            type: string
-        required:
-          - name
-          - description
-          - price
-          - category
-      ProductUpdateInput:
-        type: object
-        properties:
-          name:
-            type: string
-          description:
-            type: string
-          price:
-            type: number
-          category:
-            type: string
+      required:
+        - name
+        - description
+        - price
+        - category
+    ProductUpdateInput:
+      type: object
+      properties:
+        name:
+          type: string
+        description:
+          type: string
+        price:
+          type: number
+        category:
+          type: string
