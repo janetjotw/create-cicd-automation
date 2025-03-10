@@ -35,11 +35,11 @@ jobs:
 
       # Install Redocly CLI
       - name: Install Redocly CLI
-        run: npm install -g @redocly/cli
+        run: npx @redocly/cli
 
       # Lint OpenAPI spec
       - name: Lint OpenAPI Spec
-        run: redocly lint api-specs/api-v1.yaml
+        run: npx @redocly/cli@latest lint api-specs/api-v1.yaml
 
       # Build docs
       - name: Build Docs
