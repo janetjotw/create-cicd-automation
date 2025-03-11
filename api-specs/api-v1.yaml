@@ -9,8 +9,6 @@ paths:
   /products:
     get:
       summary: Get all products.
-      security:
-        - ApiKeyAuth:[]
       parameters:
         - name: category
           in: query
@@ -39,8 +37,6 @@ paths:
           description: Internal Server Error
     post:
       summary: Create a new product
-      security:
-        - ApiKeyAuth:[]
       requestBody:
         required: true
         content:
@@ -63,8 +59,6 @@ paths:
   /products/{productId}:
     get:
       summary: Get product by ID.
-      security:
-        - ApiKeyAuth:[]
       parameters:
         - name: productId
           in: path
@@ -85,9 +79,7 @@ paths:
         500:
           description: Internal Server Error
     put:
-      summary: Update product
-      security:
-        - ApiKeyAuth: []
+      summary: Update product.
       parameters:
         - name: productId
           in: path
@@ -117,8 +109,6 @@ paths:
           description: Internal Server Error
     delete:
       summary: Delete product
-      security:
-        - ApiKeyAuth: []
       parameters:
         - name: productId
           in: path
@@ -135,11 +125,6 @@ paths:
         '500':
           description: Internal Server Error
 components:
-  security:
-    ApiKeyAuth:
-      type: apiKey
-      in: header
-      name: Authorization
   schemas:
     Product:
       type: object
