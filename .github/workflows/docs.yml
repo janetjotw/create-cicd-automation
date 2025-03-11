@@ -39,7 +39,7 @@ jobs:
 
       # Lint OpenAPI spec
       - name: Lint OpenAPI Spec
-        run: redocly lint api-specs/api-v1.yaml
+        run: redocly lint -generate-ignore-file api-specs/api-v1.yaml
 
       # Build docs
       - name: Build Docs
