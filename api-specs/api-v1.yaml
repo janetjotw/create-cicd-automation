@@ -125,8 +125,6 @@ components:
     Product:
       type: object
       properties:
-        productId:
-          type: string
         name:
           type: string
         description:
