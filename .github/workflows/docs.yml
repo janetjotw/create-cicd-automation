@@ -38,10 +38,8 @@ jobs:
         run: npm install -g @redocly/cli@latest
 
       # Lint OpenAPI spec
-      - name: Lint OpenAPI Spec
-        run: redocly lint --format=github-actions
-        
-      # run: redocly lint api-specs/api-v1.yaml
+      - name: Lint OpenAPI Spec        
+        run: redocly lint api-specs/api-v1.yaml
 
       # Build docs
       - name: Build Docs
