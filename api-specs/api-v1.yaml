@@ -162,7 +162,7 @@ components:
           type: string
   parameters:
     ProductId:
-     name: Id
+     name: productId
      in: path
      required: true
      schema:
