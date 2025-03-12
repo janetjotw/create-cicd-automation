@@ -60,11 +60,7 @@ paths:
     get:
       summary: Get product by ID.
       parameters:
-        - name: productId
-          in: path
-          required: true
-          schema:
-            type: string
+       - $ref: "#/components/parameters/ProductId"
       responses:
         200:
           description: Product Name
@@ -166,3 +162,10 @@ components:
           type: number
         category:
           type: string
+  parameters:
+    ProductId:
+     name: Id
+     in: path
+     required: true
+     schema:
+      type: string
