@@ -129,7 +129,7 @@ components:
     Product:
       type: object
       properties:
-      id:
+      productId:
         type: string
       name:
         type: string
