@@ -12,6 +12,11 @@ Redocly is a platform designed to streamline and enhance the process of creating
 
 > api-specs/api-v1.yaml
 
+*Sample view of the Products API*
+
+[Products API](docs/API-screen.png)
+
+
 
 
  
