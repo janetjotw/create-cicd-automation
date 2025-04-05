@@ -2,8 +2,7 @@
 
 ## Introduction
 
-This repo aims to showcase the OpenAPI specification and deploy the API through GitHub Actions. 
-I would like to thank Łukasz Michta for the CI/CD for Technical Writer with Open API-Redocly exercise. I built this Github repo based on this guidance and fine-tuned the API to suit my example. 
+This repository demonstrates the use of an OpenAPI specification and the deployment of an API using GitHub Actions. Special thanks to Łukasz Michta for his "CI/CD for Technical Writers with OpenAPI and Redocly" tutorial, which served as the foundation for this project. I adapted and refined the API to align with my use case.
 
 ## What is Redocly
 
