@@ -1,0 +1,25 @@
+# This file instructs Redocly's linter to ignore the rules contained for specific parts of your API.
+# See https://redocly.com/docs/cli/ for more information.
+api-specs/api-v1.yaml:
+  info-license:
+    - '#/info'
+  no-server-example.com:
+    - '#/servers/0/url'
+  operation-operationId:
+    - '#/paths/products/get/operationId'
+    - '#/paths/products/post/operationId'
+    - '#/paths/products~1productId/get/operationId'
+    - '#/paths/products~1productId/put/operationId'
+    - '#/paths/products~1productId/delete/operationId'
+  operation-4xx-response:
+    - '#/paths/products/get/responses'
+    - '#/paths/products/post/responses'
+    - '#/paths/products~1productId/get/responses'
+    - '#/paths/products~1productId/put/responses'
+    - '#/paths/products~1productId/delete/responses'
+  security-defined:
+    - '#/paths/products/get'
+    - '#/paths/products/post'
+    - '#/paths/products~1productId/get'
+    - '#/paths/products~1productId/put'
+    - '#/paths/products~1productId/delete'
