@@ -8,7 +8,7 @@ servers:
 paths:
   /products:
     get:
-      summary: Get all products.
+      summary: Get all products
       security:
         - ApiKeyAuth: []
       parameters:
