@@ -1,6 +1,5 @@
 <!DOCTYPE html>
 <html>
-
 <head>
   <meta charset="utf8" />
   <title>Products API</title>
@@ -445,5 +444,15 @@ data-styled.g138[id="sc-dNJMoi"]{content:"ghCQVp,"}/*!sc*/
 
       </script>
 </body>
-
+<head>
+    <title>API Reference Docs</title>
+    <!-- Redoc CDN -->
+    <script src="https://cdn.redoc.ly/reference-docs/v2.13.5/redoc.standalone.js"></script>
+  </head>
+  <body>
+    <div id="redoc-container"></div>
+    <script>
+      Redoc.init('api-specs/api-v1.yaml', {}, document.getElementById('redoc-container'));
+    </script>
+  </body>
 </html>

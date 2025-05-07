@@ -62,7 +62,7 @@ paths:
           description: Internal Server Error
   /products/{productId}:
     get:
-      summary: Get product by ID
+      summary: Get product by ID.
       security:
         - ApiKeyAuth: []
       parameters:
@@ -81,7 +81,7 @@ paths:
         500:
           description: Internal Server Error
     put:
-      summary: Update product
+      summary: Update product.
       security:
         - ApiKeyAuth: []
       parameters:
