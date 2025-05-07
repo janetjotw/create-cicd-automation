@@ -5,18 +5,12 @@ info:
   description: Products API Reference
 servers:
   - url: https://api.xime.com/v1
-components:
-  securitySchemes:
-    ApiKeyAuth:
-      type: apiKey
-      in: header
-      name: Authorization
 paths:
   /products:
     get:
-      summary: get all products
+      summary: Get all products
       security:
-        - ApiKeyAuth:[]
+        - ApiKeyAuth: []
       parameters:
         - name: category
           in: query
@@ -46,7 +40,7 @@ paths:
     post:
       summary: Create a new product
       security:
-        - ApiKeyAuth:[]
+        - ApiKeyAuth: []
       requestBody:
         required: true
         content:
@@ -70,13 +64,9 @@ paths:
     get:
       summary: Get product by ID
       security:
-        - ApiKeyAuth:[]
+        - ApiKeyAuth: []
       parameters:
-        - name: productId
-          in: path
-          required: true
-          schema:
-            type: string
+       - $ref: "#/components/parameters/ProductId"
       responses:
         200:
           description: Product Name
@@ -140,13 +130,11 @@ paths:
           description: Not Found
         '500':
           description: Internal Server Error
-  components:
-    schemas:
-      Product:
-        type: object
-        properties:
-        id:
-          type: string
+components:
+  schemas:
+    Product:
+      type: object
+      properties:
         name:
           type: string
         description:
@@ -155,30 +143,41 @@ paths:
           type: number
         category:
           type: string
-      ProductInput:
-        type: object
-        properties:
-          name:
-            type: string
-          description:
-           type: string
-          price:
-            type: number
-          category:
-            type: string
-        required:
-          - name
-          - description
-          - price
-          - category
-      ProductUpdateInput:
-        type: object
-        properties:
-          name:
-            type: string
-          description:
-            type: string
-          price:
-            type: number
-          category:
-            type: string
+    ProductInput:
+      type: object
+      properties:
+        name:
+          type: string
+        description:
+          type: string
+        price:
+          type: number
+        category:
+          type: string
+      required:
+        - name
+        - description
+        - price
+        - category
+    ProductUpdateInput:
+      type: object
+      properties:
+        name:
+          type: string
+        description:
+          type: string
+        price:
+          type: number
+        category:
+          type: string
+  parameters:
+    ProductId:
+     name: productId
+     in: path
+     required: true
+     schema:
+      type: string
+  securitySchemes:
+    ApiKeyAuth:
+      type: http
+      scheme: basic
