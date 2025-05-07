@@ -1,0 +1,68 @@
+openapi: 3.0.1
+info:
+  title: CMC Majors
+  version: v1
+paths:
+  /popularity:
+    get:
+      summary: Get popularity by major
+      responses:
+        '200':
+          description: OK
+          headers:
+            x-amzn-requestid:
+              schema:
+                description: ID of the Amazon request
+                type: string
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  class:
+                    type: string
+                  breakdown:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        major:
+                          type: string
+                        count:
+                          type: integer
+      parameters:
+        - name: class
+          in: query
+          required: true
+          schema:
+            type: string
+            example: "2025"     
+  /majors:
+    post:
+      summary: Add a major
+      requestBody:
+        content:
+          application/json:
+            $ref: '#/components/schemas/major'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              $ref: '#/components/schemas/major'
+      security:
+        - admin: []
+components:
+  schemas:
+    major:
+      type: object
+      properties:
+        major:
+          type: string
+          examples:
+            - APIs
+  securitySchemes:
+    admin:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
