@@ -167,6 +167,7 @@ components:
         - description
         - price
         - category
+        - sku
     ProductUpdateInput:
       type: object
       properties:
