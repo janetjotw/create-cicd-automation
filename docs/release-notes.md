@@ -4,6 +4,10 @@ All notable changes to the Products API are listed here, newest first.
 
 ## Unreleased
 
+### Breaking
+
+- `sku` field is now required when you create a product with `POST /products`. Requests that omit `sku` will fail, so include a `sku` string in every create request. (#6)
+
 ### Added
 
 - `sku` field on products. Returned by `GET /products/{productId}`, and accepted when you create a product with `POST /products` or update one with `PUT /products/{productId}`. Optional. (#5)
