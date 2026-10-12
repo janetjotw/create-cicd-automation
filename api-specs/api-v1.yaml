@@ -143,6 +143,10 @@ components:
           type: number
         category:
           type: string
+        sku:
+          type: string
+          description: Stock keeping unit. A unique code your inventory system uses to identify the product.
+          example: TSHIRT-BLU-M
     ProductInput:
       type: object
       properties:
@@ -154,6 +158,10 @@ components:
           type: number
         category:
           type: string
+        sku:
+          type: string
+          description: Stock keeping unit. A unique code your inventory system uses to identify the product.
+          example: TSHIRT-BLU-M
       required:
         - name
         - description
@@ -170,6 +178,10 @@ components:
           type: number
         category:
           type: string
+        sku:
+          type: string
+          description: Stock keeping unit. A unique code your inventory system uses to identify the product.
+          example: TSHIRT-BLU-M
   parameters:
     ProductId:
      name: productId
