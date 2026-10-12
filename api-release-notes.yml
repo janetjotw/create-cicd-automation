@@ -1,0 +1,56 @@
+# Drafts release notes when a pull request changes an API spec.
+#
+# How it works:
+# 1. Someone opens a PR that edits a file under api-specs/.
+# 2. Claude compares the spec on the PR branch with main.
+# 3. Claude adds an entry to docs/release-notes.md, commits it to the
+#    same PR branch, and comments on the PR with anything a writer
+#    should check.
+# 4. A human reviews the spec change and the release note together,
+#    then merges. The existing docs.yml workflow builds the docs on main.
+
+name: Draft API release notes
+
+on:
+  pull_request:
+    types: [opened, synchronize]
+    paths:
+      - "api-specs/**"
+
+jobs:
+  draft-release-notes:
+    # Pull requests from forks can't read repository secrets, so skip them.
+    if: github.event.pull_request.head.repo.full_name == github.repository
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      pull-requests: write
+      id-token: write
+
+    steps:
+      # Check out the PR branch with full history so the agent can diff against main.
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.pull_request.head.ref }}
+          fetch-depth: 0
+
+      - uses: anthropics/claude-code-action@v1
+        with:
+          # Use ONE of these two secrets, whichever you added in
+          # Settings > Secrets and variables > Actions.
+          # anthropic_api_key: ${{ secrets.ANTHROPIC_API_KEY }}
+            claude_code_oauth_token: ${{ secrets.CLAUDE_CODE_OAUTH_TOKEN }}
+
+          prompt: |
+            REPO: ${{ github.repository }}
+            PR NUMBER: ${{ github.event.pull_request.number }}
+            PR TITLE: ${{ github.event.pull_request.title }}
+            BASE BRANCH: ${{ github.event.pull_request.base.ref }}
+
+            The PR branch is already checked out in the current directory.
+
+            Read .github/docs-agent/release-notes-instructions.md and follow it
+            exactly. Those instructions are your full task for this run.
+
+          claude_args: |
+            --allowedTools "Read,Write,Edit,Glob,Grep,Bash(git diff:*),Bash(git log:*),Bash(git status:*),Bash(git add:*),Bash(git commit:*),Bash(git push:*),Bash(gh pr view:*),Bash(gh pr comment:*)"
