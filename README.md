@@ -1,10 +1,10 @@
-# Open API Spec and CI/CD to Redocly
+# OpenAPI Spec and CI/CD to Redocly
 
 ## Introduction
 
 This repository demonstrates the use of an OpenAPI specification and the deployment of an API using GitHub Actions. Special thanks to Łukasz Michta for his "CI/CD for Technical Writers with OpenAPI and Redocly" tutorial, which served as the foundation for this project. I adapted and refined the API to align with my use case.
 
-## Part 1: Generate the Open API spec using Redocly
+## Part 1: Build API docs from the OpenAPI spec with Redocly
 
 ### What is Redocly
 
@@ -21,7 +21,7 @@ Redocly is a platform designed to streamline and enhance the process of creating
 
 ## Part 2: Automated release notes
 
-When a pull request changes the API spec, Claude drafts a release note and adds it to the PR for review. The PR is not merged until a human reviews and approves the merge.
+When a pull request changes the API spec, Claude drafts a release note and adds it to the PR for review. The PR isn't merged until a human reviews and approves it.
 
 ### One-time setup
 
