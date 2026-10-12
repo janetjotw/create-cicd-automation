@@ -39,7 +39,7 @@ jobs:
           # Use ONE of these two secrets, whichever you added in
           # Settings > Secrets and variables > Actions.
           # anthropic_api_key: ${{ secrets.ANTHROPIC_API_KEY }}
-            claude_code_oauth_token: ${{ secrets.CLAUDE_CODE_OAUTH_TOKEN }}
+          claude_code_oauth_token: ${{ secrets.CLAUDE_CODE_OAUTH_TOKEN }}
 
           prompt: |
             REPO: ${{ github.repository }}
