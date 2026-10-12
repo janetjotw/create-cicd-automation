@@ -4,7 +4,9 @@
 
 This repository demonstrates the use of an OpenAPI specification and the deployment of an API using GitHub Actions. Special thanks to Łukasz Michta for his "CI/CD for Technical Writers with OpenAPI and Redocly" tutorial, which served as the foundation for this project. I adapted and refined the API to align with my use case.
 
-## What is Redocly
+## Part 1: Generate the Open API spec using Redocly
+
+### What is Redocly
 
 Redocly is a platform designed to streamline and enhance the process of creating, managing, and publishing API documentation. Redocly helps generate interactive and visually appealing API documentation from OpenAPI specifications. It transforms raw API definitions into developer-friendly documentation.
 
@@ -17,6 +19,27 @@ Redocly is a platform designed to streamline and enhance the process of creating
 [Products API](docs/API-screen.png)
 
 
+## Part 2: Automated release notes
+
+When a pull request changes the API spec, Claude drafts a release note and adds it to the PR for review. The PR is not merged until a human reviews and approves the merge.
+
+### One-time setup
+
+1. **Generate a Claude token.** In your terminal, run `claude setup-token`, sign in when the browser opens, and copy the token it prints.
+2. **Add the token to GitHub.** In the repo, go to **Settings > Secrets and variables > Actions > New repository secret**. Name it `CLAUDE_CODE_OAUTH_TOKEN` and paste the token.
+3. **Install the Claude GitHub app** on this repo: https://github.com/apps/claude
+4. **Add the automation files:**
+   - `.github/workflows/api-release-notes.yml`: runs Claude when a PR changes `api-specs/`
+   - `.github/docs-agent/release-notes-instructions.md`: tells Claude how to write the notes
+   - `docs/release-notes.md`: where the notes are saved
+
+### Each time the API changes
+
+1. **Change the spec on a new branch.** Edit `api-specs/api-v1.yaml`, for example by adding a field.
+2. **Open a pull request** into `main`.
+3. **Claude drafts the release note.** Within a few minutes, it adds an entry to `docs/release-notes.md` on your PR and comments with anything to check.
+4. **Review the spec change and the note together.** Edit the note if needed.
+5. **Merge the PR.** The release note goes live on `main` with the spec change.
 
 
  
