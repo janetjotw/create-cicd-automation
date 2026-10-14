@@ -18,6 +18,8 @@ Redocly is a platform designed to streamline and enhance the process of creating
 
 [Products API](docs/API-screen.png)
 
+Screenshot of the [Products API on readme.io](https://github.com/janetjotw/create-cicd-automation/blob/main/api-specs/products-api.png).
+
 
 ## Part 2: Automated release notes
 
