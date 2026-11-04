@@ -20,6 +20,16 @@ Screenshot of the [Products API on Redocly](docs/API-screen.png)
 
 Screenshot of the [Products API on readme.io](https://github.com/janetjotw/create-cicd-automation/blob/main/api-specs/products-api.png).
 
+### View the docs on your computer
+
+The build command creates a single HTML file. To open it, run these commands from your local copy of the repository:
+
+```bash
+npm install -g @redocly/cli        # one time only
+redocly build-docs api-specs/api-v1.yaml --output docs/index.html
+open docs/index.html               # Mac; on Windows: start docs\index.html
+```
+
 
 ## Part 2: Automated release notes
 
