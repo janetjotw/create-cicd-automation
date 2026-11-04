@@ -2,94 +2,117 @@ openapi: 3.0.0
 info:
   title: Products API
   version: 1.0.0
-  description: Products API Reference
+  description: |
+    Create, list, retrieve, update, and delete products in your catalog.
+
+    Every request must include your API key in the `x-api-key` header.
 servers:
   - url: https://api.xime.com/v1
+security:
+  - ApiKeyAuth: []
+tags:
+  - name: Products
+    description: Manage the products in your catalog.
 paths:
   /products:
     get:
-      summary: Get all products
-      security:
-        - ApiKeyAuth: []
+      operationId: listProducts
+      tags:
+        - Products
+      summary: List products
+      description: Returns a page of products, optionally filtered by category.
       parameters:
         - name: category
           in: query
+          description: Return only products in this category.
           schema:
             type: string
-          description: Filter the products by category.
-        - name: limit
+            example: apparel
+        - name: page
           in: query
+          description: The page of results to return. The first page is 1.
           schema:
             type: integer
-          description: The number of products per page.
+            minimum: 1
+            default: 1
+            example: 2
+        - name: limit
+          in: query
+          description: The number of products to return per page.
+          schema:
+            type: integer
+            minimum: 1
+            maximum: 100
+            default: 20
+            example: 20
       responses:
-        200:
-          description: A list of products.
+        '200':
+          description: A page of products.
           content:
             application/json:
               schema:
-                type: object
-                properties:
-                  message:
-                    type: string
-                    example: Hello World
-        401: 
-          description: Unauthorized
-        500:
-          description: Internal Server Error
+                $ref: '#/components/schemas/ProductList'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
     post:
-      summary: Create a new product
-      security:
-        - ApiKeyAuth: []
+      operationId: createProduct
+      tags:
+        - Products
+      summary: Create a product
+      description: Adds a product to your catalog and returns it with its new `id`.
       requestBody:
         required: true
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/ProductInput'            
+              $ref: '#/components/schemas/ProductInput'
       responses:
-        201:
-          description: Product created successfully.
+        '201':
+          description: The product was created.
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Product'            
-        400:
-          description: Bad Request
-        401: 
-          description: Unauthorized
-        500:
-          description: Internal Server Error
+                $ref: '#/components/schemas/Product'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
   /products/{productId}:
+    parameters:
+      - $ref: '#/components/parameters/ProductId'
     get:
-      summary: Get product by ID.
-      security:
-        - ApiKeyAuth: []
-      parameters:
-       - $ref: "#/components/parameters/ProductId"
+      operationId: getProduct
+      tags:
+        - Products
+      summary: Get a product
+      description: Returns a single product by its ID.
       responses:
-        200:
-          description: Product Name
+        '200':
+          description: The requested product.
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Product'            
-        401: 
-          description: Unauthorized
-        404:
-          description: Not Found
-        500:
-          description: Internal Server Error
-    put:
-      summary: Update product.
-      security:
-        - ApiKeyAuth: []
-      parameters:
-        - name: productId
-          in: path
-          required: true
-          schema:
-            type: string
+                $ref: '#/components/schemas/Product'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+    patch:
+      operationId: updateProduct
+      tags:
+        - Products
+      summary: Update a product
+      description: |
+        Updates only the fields you include in the request body. Fields you
+        leave out keep their current values.
       requestBody:
         required: true
         content:
@@ -98,70 +121,79 @@ paths:
               $ref: '#/components/schemas/ProductUpdateInput'
       responses:
         '200':
-          description: Product updated successfully.
+          description: The product was updated. The response contains the full, updated product.
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/Product'
         '400':
-          description: Bad Request
+          $ref: '#/components/responses/BadRequest'
         '401':
-          description: Unauthorized
+          $ref: '#/components/responses/Unauthorized'
         '404':
-          description: Not Found
+          $ref: '#/components/responses/NotFound'
         '500':
-          description: Internal Server Error
+          $ref: '#/components/responses/InternalServerError'
     delete:
-      summary: Delete product
-      security:
-        - ApiKeyAuth: []
-      parameters:
-        - name: productId
-          in: path
-          required: true
-          schema:
-            type: string
+      operationId: deleteProduct
+      tags:
+        - Products
+      summary: Delete a product
+      description: Permanently removes a product from your catalog.
       responses:
         '204':
-          description: No Content
+          description: The product was deleted. The response has no body.
         '401':
-          description: Unauthorized
+          $ref: '#/components/responses/Unauthorized'
         '404':
-          description: Not Found
+          $ref: '#/components/responses/NotFound'
         '500':
-          description: Internal Server Error
+          $ref: '#/components/responses/InternalServerError'
 components:
+  securitySchemes:
+    ApiKeyAuth:
+      type: apiKey
+      in: header
+      name: x-api-key
+      description: Your API key. Send it in the `x-api-key` header of every request.
+  parameters:
+    ProductId:
+      name: productId
+      in: path
+      required: true
+      description: The unique ID of the product, returned in the `id` field when you create it.
+      schema:
+        type: string
+        example: prod_8f3k2m
   schemas:
-    Product:
+    ProductFields:
       type: object
       properties:
         name:
           type: string
+          description: The product name shown to customers.
+          example: Classic T-shirt
         description:
           type: string
+          description: A short description of the product.
+          example: Soft cotton crew-neck T-shirt.
         price:
           type: number
+          format: double
+          minimum: 0
+          description: The price in US dollars, with up to two decimal places.
+          example: 19.99
         category:
           type: string
+          description: The category the product belongs to. Use it to filter `GET /products`.
+          example: apparel
         sku:
           type: string
           description: Stock keeping unit. A unique code your inventory system uses to identify the product.
           example: TSHIRT-BLU-M
     ProductInput:
-      type: object
-      properties:
-        name:
-          type: string
-        description:
-          type: string
-        price:
-          type: number
-        category:
-          type: string
-        sku:
-          type: string
-          description: Stock keeping unit. A unique code your inventory system uses to identify the product.
-          example: TSHIRT-BLU-M
+      allOf:
+        - $ref: '#/components/schemas/ProductFields'
       required:
         - name
         - description
@@ -169,28 +201,90 @@ components:
         - category
         - sku
     ProductUpdateInput:
+      allOf:
+        - $ref: '#/components/schemas/ProductFields'
+      minProperties: 1
+      description: Include at least one field to update.
+    Product:
+      allOf:
+        - type: object
+          required:
+            - id
+          properties:
+            id:
+              type: string
+              readOnly: true
+              description: The unique ID of the product, assigned when you create it.
+              example: prod_8f3k2m
+        - $ref: '#/components/schemas/ProductFields'
+    ProductList:
       type: object
       properties:
-        name:
+        data:
+          type: array
+          description: The products on this page.
+          items:
+            $ref: '#/components/schemas/Product'
+        page:
+          type: integer
+          description: The page number returned.
+          example: 2
+        limit:
+          type: integer
+          description: The maximum number of products per page.
+          example: 20
+        total:
+          type: integer
+          description: The total number of products that match the request, across all pages.
+          example: 57
+    Error:
+      type: object
+      required:
+        - code
+        - message
+      properties:
+        code:
           type: string
-        description:
+          description: A machine-readable error code.
+          example: invalid_request
+        message:
           type: string
-        price:
-          type: number
-        category:
-          type: string
-        sku:
-          type: string
-          description: Stock keeping unit. A unique code your inventory system uses to identify the product.
-          example: TSHIRT-BLU-M
-  parameters:
-    ProductId:
-     name: productId
-     in: path
-     required: true
-     schema:
-      type: string
-  securitySchemes:
-    ApiKeyAuth:
-      type: http
-      scheme: basic
+          description: A human-readable explanation of the error.
+          example: The price field must be 0 or greater.
+  responses:
+    BadRequest:
+      description: The request is invalid, for example a required field is missing or a value is out of range.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+          example:
+            code: invalid_request
+            message: The price field must be 0 or greater.
+    Unauthorized:
+      description: The API key is missing or invalid.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+          example:
+            code: unauthorized
+            message: Provide a valid API key in the x-api-key header.
+    NotFound:
+      description: No product exists with the given ID.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+          example:
+            code: not_found
+            message: No product found with ID prod_8f3k2m.
+    InternalServerError:
+      description: Something went wrong on the server. Try again later.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+          example:
+            code: internal_error
+            message: An unexpected error occurred.
