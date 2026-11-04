@@ -14,6 +14,8 @@ Redocly is a platform designed to streamline and enhance the process of creating
 
 > api-specs/api-v1.yaml
 
+**Live API reference:** [janetjotw.github.io/create-cicd-automation](https://janetjotw.github.io/create-cicd-automation/). It's rebuilt and published automatically every time `main` changes.
+
 *Sample view of the Products API*
 
 Screenshot of the [Products API on Redocly](docs/API-screen.png)
