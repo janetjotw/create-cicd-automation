@@ -47,7 +47,7 @@ paths:
             example: 20
       responses:
         '200':
-          description: A page of products.
+          description: A paginated list of products.
           content:
             application/json:
               schema:
