@@ -1,48 +1,69 @@
-# This is a basic workflow to help you get started with Actions
+# Lints the OpenAPI spec, builds the API reference with Redocly,
+# and publishes it to GitHub Pages.
+#
+# One-time setup: in the repo, go to Settings > Pages and set
+# Build and deployment > Source to "GitHub Actions".
 
-name: CI - Build API and deploy API spec
+name: CI - Build and publish API docs
 
-# Controls when the workflow will run
 on:
-  # Triggers the workflow on push or pull request events but only for the "main" branch
+  # Build and publish whenever main changes.
   push:
     branches: [ "main" ]
 
-  # Allows you to run this workflow manually from the Actions tab
+  # Allows you to run this workflow manually from the Actions tab.
   workflow_dispatch:
 
-# A workflow run is made up of one or more jobs that can run sequentially or in parallel
-jobs:
-  # This workflow contains a single job called "build"
-  build:
-    # The type of runner that the job will run on
-    runs-on: ubuntu-latest
+# Permissions the Pages deployment needs.
+permissions:
+  contents: read
+  pages: write
+  id-token: write
 
-    # Steps represent a sequence of tasks that will be executed as part of the job
+# Run one deployment at a time; let an in-progress deployment finish.
+concurrency:
+  group: pages
+  cancel-in-progress: false
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
     steps:
-      # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
+      # Check out the repo so the job can read the spec.
       - uses: actions/checkout@v4
 
-      # Runs a single command using the runners shell
-      - name: Run a one-line script
-        run: echo Hello, world!
-
-      # Set up Node.js
+      # Set up Node.js for the Redocly CLI.
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
           node-version: 20
 
-      # Install Redocly CLI
+      # Install Redocly CLI.
       - name: Install Redocly CLI
         run: npm install -g @redocly/cli
 
-      # Lint OpenAPI spec
-      - name: Lint OpenAPI Spec        
+      # Lint the OpenAPI spec. The workflow stops here if the spec is invalid.
+      - name: Lint OpenAPI Spec
         run: redocly lint api-specs/api-v1.yaml
 
-      # Build docs
+      # Build the API reference into docs/index.html.
       - name: Build Docs
-        run: |
-          redocly build-docs api-specs/api-v1.yaml --output docs/index.html
+        run: redocly build-docs api-specs/api-v1.yaml --output docs/index.html
 
+      # Package the docs folder for GitHub Pages.
+      - name: Upload Pages artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: docs
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      # Publish the packaged docs to GitHub Pages.
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4
